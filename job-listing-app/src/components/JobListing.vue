@@ -1,4 +1,5 @@
 <script setup>
+import { ROUTE_NAMES } from '@/router/routeConstants'
 import { computed, ref } from 'vue'
 
 const props = defineProps({
@@ -41,10 +42,15 @@ const truncatedDescription = computed(() => {
           <i class="pi pi-map-marker text-orange-700"></i>
           {{ job.location }}
         </div>
-        <a :href="`/jobs/${job.id}`"
-           class="h-[36px] rounded-lg bg-green-500 px-4 py-2 text-center text-sm text-white hover:bg-green-600">
-          Read
-        </a>
+        <RouterLink
+          :to="{
+            name: ROUTE_NAMES.job,
+            params: { id: job.id },
+          }"
+          class="h-[36px] rounded-lg bg-green-500 px-4 py-2 text-center text-sm text-white hover:bg-green-600"
+        >
+          Read More
+        </RouterLink>
       </div>
     </div>
   </div>

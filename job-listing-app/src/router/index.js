@@ -1,10 +1,12 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
 import HomeView from '@/views/HomeView.vue'
-
+import NotFoundView from '@/views/NotFoundView.vue'
+import { ROUTE_NAMES, ROUTE_PATHS } from './routeConstants'
 
 const routes = [
-  { path: '/', name: home, component: HomeView }
+  { path: ROUTE_PATHS.home, name: ROUTE_NAMES.home, component: HomeView },
+  { path: '/:pathMatch(.*)*', name: ROUTE_NAMES.NotFound, component: NotFoundView }
 ]
 
 const router = createRouter({

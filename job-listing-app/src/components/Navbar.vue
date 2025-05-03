@@ -1,5 +1,28 @@
 <script setup>
 import logo from '@/assets/img/logo.png'
+import { ROUTE_PATHS } from '@/router/routeConstants'
+import { useRoute } from 'vue-router'
+import { RouterLink } from 'vue-router'
+
+const isActiveLink = (to) => {
+  const route = useRoute()
+  return to === route.path
+}
+
+const navs = [
+  {
+    name: 'Home',
+    to: ROUTE_PATHS.home,
+  },
+  {
+    name: 'Jobs',
+    to: ROUTE_PATHS.jobs,
+  },
+  {
+    name: 'Add Job',
+    to: ROUTE_PATHS.jobAdd,
+  },
+]
 </script>
 
 <template>
@@ -8,15 +31,20 @@ import logo from '@/assets/img/logo.png'
       <div class="flex h-20 items-center justify-between">
         <div class="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
           <!-- Logo -->
-          <a href="/" class="mr-4 flex flex-shrink-0 items-center">
+          <RouterLink :to="ROUTE_PATHS.home" class="mr-4 flex flex-shrink-0 items-center">
             <img class="h-10 w-auto" :src="logo" alt="Vue Jobs" />
             <span class="ml-2 hidden text-2xl font-bold text-white md:block">Vue Jobs</span>
-          </a>
+          </RouterLink>
           <div class="md:ml-auto">
             <div class="flex space-x-2">
-              <a href="/" class="hover:bg-green-900 rounded-md px-3 py-2 text-white hover:bg-green-900 hover:text-white">Home</a>
-              <a href="/jobs" class="hover:bg-green-900 rounded-md px-3 py-2 text-white hover:bg-green-900 hover:text-white">Jobs</a>
-              <a href="/jobs/add" class="hover:bg-green-900 rounded-md px-3 py-2 text-white hover:bg-green-900 hover:text-white">Job Add</a>
+              <RouterLink
+                v-for="nav in navs"
+                :key="nav.name"
+                :to="nav.to"
+                :class="isActiveLink(nav.to) ? 'bg-green-900' : 'hover:bg-green-900'"
+                class="rounded-md px-3 py-2 text-white hover:bg-green-900 hover:text-white"
+                >{{ nav.name }}</RouterLink
+              >
             </div>
           </div>
         </div>

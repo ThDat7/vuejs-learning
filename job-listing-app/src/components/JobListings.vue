@@ -1,7 +1,9 @@
 <script setup>
 import JobListing from '@/components/JobListing.vue'
+import { ROUTE_PATHS } from '@/router/routeConstants'
 import JobService from '@/service/JobService'
 import { onMounted, ref } from 'vue'
+import { RouterLink } from 'vue-router'
 
 const jobs = ref([])
 
@@ -29,8 +31,10 @@ const props = defineProps({
   </section>
 
   <section v-if="showMoreButton" class="m-auto my-10 max-w-lg px-6">
-    <a href="/jobs" class="block rounded-xl bg-black px-6 py-4 text-center text-white hover:bg-gray-700">
-      View All Jobs
-    </a>
+    <RouterLink
+      :to="ROUTE_PATHS.jobs"
+      class="block rounded-xl bg-black px-6 py-4 text-center text-white hover:bg-gray-700"
+      >View All Jobs</RouterLink
+    >
   </section>
 </template>
