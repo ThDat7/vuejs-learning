@@ -5,4 +5,5 @@ export const ENDPOINTS = {
     job(id) { return `/jobs/${id}` },
     deleteJob(id) { return `/jobs/${id}` },
     addJob() { return `/jobs` },
+    editJob(id) { return `/jobs/${id}` },
 }

@@ -3,6 +3,7 @@ export const ROUTE_PATHS = {
     jobs: '/jobs',
     job: '/jobs/:id',
     jobAdd: '/jobs/add',
+    jobEdit: '/jobs/:id/edit',
   }
   
   export const ROUTE_NAMES = {
@@ -10,6 +11,7 @@ export const ROUTE_PATHS = {
     jobs: 'jobs',
     job: 'job',
     jobAdd: 'jobAdd',
+    jobEdit: 'jobEdit',
     NotFound: 'NotFound'
   }
   

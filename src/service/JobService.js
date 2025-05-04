@@ -17,6 +17,10 @@ class JobService extends BaseService {
     async addJob(job) {
         return this.post(ENDPOINTS.addJob(), job)
     }
+
+    async editJob(id, job) {
+        return this.put(ENDPOINTS.editJob(id), job)
+    }
 }
 
 export default new JobService();
