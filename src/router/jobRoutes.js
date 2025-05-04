@@ -1,6 +1,7 @@
 import JobsView from "@/views/JobsView.vue";
 import { ROUTE_NAMES, ROUTE_PATHS } from "@/router/routeConstants";
 import JobView from "@/views/JobView.vue";
+import JobAddView from "@/views/JobAddView.vue";
 
 export default [
     {
@@ -12,6 +13,11 @@ export default [
       path: ROUTE_PATHS.job,
       name: ROUTE_NAMES.job,
       component: JobView,
+    },
+    {
+      path: ROUTE_PATHS.jobAdd,
+      name: ROUTE_NAMES.jobAdd,
+      component: JobAddView,
     }
   ];
   

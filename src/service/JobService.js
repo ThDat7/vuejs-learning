@@ -9,6 +9,13 @@ class JobService extends BaseService {
     async getJobById(id) {
         return this.get(ENDPOINTS.job(id))
     }
+
+    async deleteJob(id) {
+        return this.delete(ENDPOINTS.deleteJob(id))
+    }
+
+    async addJob(job) {
+        return this.post(ENDPOINTS.addJob(), job)
     }
 }
 
