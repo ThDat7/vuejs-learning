@@ -2,13 +2,26 @@
 import JobListing from '@/components/JobListing.vue'
 import { ROUTE_PATHS } from '@/router/routeConstants'
 import JobService from '@/service/JobService'
-import { onMounted, ref } from 'vue'
+import { onMounted, reactive } from 'vue'
 import { RouterLink } from 'vue-router'
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
+import { useToast } from 'vue-toastification'
 
-const jobs = ref([])
+const toast = useToast()
+const state = reactive({
+  jobs: [],
+  isLoading: false,
+})
 
 onMounted(async () => {
-  jobs.value = await JobService.getJobs()
+  try {
+    state.isLoading = true
+    state.jobs = await JobService.getJobs()
+  } catch (error) {
+    toast.error('Failed to load jobs')
+  } finally {
+    state.isLoading = false
+  }
 })
 
 const props = defineProps({
@@ -24,8 +37,15 @@ const props = defineProps({
   <section class="bg-green-50 px-4 py-10">
     <div class="container-xl m-auto lg:container">
       <h2 class="mb-6 text-center text-3xl font-bold text-green-500">Browse Jobs</h2>
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-        <JobListing v-for="job in jobs.slice(0, limit || jobs.length)" :key="job.id" :job="job" />
+      <div v-if="state.isLoading" class="py-6 text-center text-gray-500">
+        <PulseLoader />
+      </div>
+      <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <JobListing
+          v-for="job in state.jobs.slice(0, limit || state.jobs.length)"
+          :key="job.id"
+          :job="job"
+        />
       </div>
     </div>
   </section>

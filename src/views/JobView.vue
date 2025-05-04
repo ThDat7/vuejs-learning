@@ -1,38 +1,65 @@
 <script setup>
+import BackButton from '@/components/BackButton.vue'
+import { ROUTE_NAMES } from '@/router/routeConstants'
 import JobService from '@/service/JobService'
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, onMounted, reactive } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
+import { useToast } from 'vue-toastification'
 
+const router = useRouter()
+const toast = useToast()
 const route = useRoute()
-const job = ref(null)
-onMounted(async () => {
-  const id = route.params.id
-  if (!id) return
-  job.value = await JobService.getJobById(id)
+const state = reactive({
+  job: {},
+  isLoading: true,
 })
+
+const id = computed(() => route.params.id)
+
+onMounted(async () => {
+  if (!id.value) return
+  try {
+    state.isLoading = true
+    state.job = await JobService.getJobById(id.value)
+  } catch (error) {
+    toast.error(`Failed to load job with id ${id.value}`)
+  } finally {
+    state.isLoading = false
+  }
+})
+
+const deleteJob = async () => {
+  if (!id.value) return
+
+  try {
+    await JobService.deleteJob(id.value)
+    router.push({ name: ROUTE_NAMES.jobs })
+  } catch (error) {
+    toast.error(`Failed to delete job with id ${id.value}`)
+  }
+}
 </script>
 
 <template>
   <!-- Go Back -->
-  <section>
-    <div class="container m-auto px-6 py-6">
-      <a href="jobs.html" class="flex items-center text-green-500 hover:text-green-600">
-        <i class="fas fa-arrow-left mr-2"></i> Back to Job Listings
-      </a>
-    </div>
-  </section>
+  <BackButton />
 
-  <div v-if="job">
+  <div v-if="state.isLoading" class="py-6 text-center text-gray-500">
+    <PulseLoader />
+  </div>
+
+  <div v-else>
     <section class="bg-green-50">
       <div class="container m-auto px-6 py-10">
         <div class="md:grid-cols-70/30 grid w-full grid-cols-1 gap-6">
           <main>
             <div class="rounded-lg bg-white p-6 text-center shadow-md md:text-left">
-              <div class="mb-4 text-gray-500">{{ job.type }}</div>
-              <h1 class="mb-4 text-3xl font-bold">{{ job.title }}</h1>
+              <div class="mb-4 text-gray-500">{{ state.job.type }}</div>
+              <h1 class="mb-4 text-3xl font-bold">{{ state.job.title }}</h1>
               <div class="mb-4 flex justify-center align-middle text-gray-500 md:justify-start">
                 <i class="fa-solid fa-location-dot mr-2 text-lg text-orange-700"></i>
-                <p class="text-orange-700">{{ job.location }}</p>
+                <p class="text-orange-700">{{ state.job.location }}</p>
               </div>
             </div>
 
@@ -40,12 +67,12 @@ onMounted(async () => {
               <h3 class="mb-6 text-lg font-bold text-green-800">Job Description</h3>
 
               <p class="mb-4">
-                {{ job.description }}
+                {{ state.job.description }}
               </p>
 
               <h3 class="mb-2 text-lg font-bold text-green-800">Salary</h3>
 
-              <p class="mb-4">{{ job.salary }} / Year</p>
+              <p class="mb-4">{{ state.job.salary }} / Year</p>
             </div>
           </main>
 
@@ -55,30 +82,30 @@ onMounted(async () => {
             <div class="rounded-lg bg-white p-6 shadow-md">
               <h3 class="mb-6 text-xl font-bold">Company Info</h3>
 
-              <h2 class="text-2xl">{{ job.company.name }}</h2>
+              <h2 class="text-2xl">{{ state.job.company.name }}</h2>
 
               <p class="my-2">
-                {{ job.company.description }}
+                {{ state.job.company.description }}
               </p>
 
               <hr class="my-4" />
 
               <h3 class="text-xl">Contact Email:</h3>
 
-              <p class="my-2 bg-green-100 p-2 font-bold">{{ job.company.contactEmail }}</p>
+              <p class="my-2 bg-green-100 p-2 font-bold">{{ state.job.company.contactEmail }}</p>
 
               <h3 class="text-xl">Contact Phone:</h3>
 
-              <p class="my-2 bg-green-100 p-2 font-bold">{{ job.company.contactPhone }}</p>
+              <p class="my-2 bg-green-100 p-2 font-bold">{{ state.job.company.contactPhone }}</p>
             </div>
 
             <!-- Manage -->
             <div class="mt-6 rounded-lg bg-white p-6 shadow-md">
               <h3 class="mb-6 text-xl font-bold">Manage Job</h3>
-              <a
-                href="add-job.html"
+              <RouterLink
+                :to="{ name: ROUTE_NAMES.jobEdit, params: { id: state.job.id } }"
                 class="focus:shadow-outline mt-4 block w-full rounded-full bg-green-500 px-4 py-2 text-center font-bold text-white hover:bg-green-600 focus:outline-none"
-                >Edit Job</a
+                >Edit Job</RouterLink
               >
               <button
                 class="focus:shadow-outline mt-4 block w-full rounded-full bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-600 focus:outline-none"
