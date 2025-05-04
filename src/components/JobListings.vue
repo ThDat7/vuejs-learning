@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import JobListing from '@/components/JobListing.vue'
 import { ROUTE_PATHS } from '@/router/routeConstants'
 import JobService from '@/service/JobService'
@@ -6,9 +6,15 @@ import { onMounted, reactive } from 'vue'
 import { RouterLink } from 'vue-router'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import { useToast } from 'vue-toastification'
+import type { Job } from '@/types/Job'
+
+interface JobListingsState {
+  jobs: Job[]
+  isLoading: boolean
+}
 
 const toast = useToast()
-const state = reactive({
+const state = reactive<JobListingsState>({
   jobs: [],
   isLoading: false,
 })

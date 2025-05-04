@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Hero from '@/components/Hero.vue'
 import HomeCard from '@/components/HomeCard.vue'
 import JobListings from '@/components/JobListings.vue'

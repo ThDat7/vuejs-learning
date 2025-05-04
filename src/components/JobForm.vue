@@ -1,13 +1,17 @@
-<script setup>
+<script setup lang="ts">
 import { reactive } from 'vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
+import type { Job } from '@/types/Job'
 
 const emit = defineEmits(['save'])
 
-const props = defineProps({
-  job: {
-    type: Object,
-    default: () => ({
+const props = withDefaults(
+  defineProps<{
+    job?: Job
+    isLoading: boolean
+  }>(),
+  {
+    job: () => ({
       type: 'Full-Time',
       title: '',
       description: '',
@@ -20,12 +24,9 @@ const props = defineProps({
         contactPhone: '',
       },
     }),
-  },
-  isLoading: {
-    type: Boolean,
-    default: false,
-  },
-})
+    isLoading: false,
+  }
+)
 
 const job = reactive({
   ...props.job,

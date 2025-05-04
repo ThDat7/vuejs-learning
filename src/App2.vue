@@ -1,40 +1,43 @@
-<script setup>
-
+<script setup lang="ts">
 import { onMounted, ref } from 'vue'
 
-    const name = ref('John Doe')
-    const status = ref('pending')
-    const tasks = ref(['Task One', 'Task Two', 'Task Three'])
-    const newTask = ref('')
-    
-    const toggleStatus = () => {
-        if (status.value === 'active') {
-          status.value = 'pending'
-        } else if (status.value === 'pending') {
-          status.value = 'inactive'
-        } else {
-          status.value = 'active'
-        }
-      }
+const name = ref('John Doe')
+const status = ref('pending')
+const tasks = ref(['Task One', 'Task Two', 'Task Three'])
+const newTask = ref('')
 
-    const addTask = () => {
-      tasks.value.push(newTask.value)
-      newTask.value = ''
-    }
+const toggleStatus = () => {
+  if (status.value === 'active') {
+    status.value = 'pending'
+  } else if (status.value === 'pending') {
+    status.value = 'inactive'
+  } else {
+    status.value = 'active'
+  }
+}
 
-    const deleteTask = (index) => {
-      tasks.value.splice(index, 1)
-    }
+const addTask = () => {
+  tasks.value.push(newTask.value)
+  newTask.value = ''
+}
 
-    onMounted(async () => {
-      try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/todos')
-        const data = await response.json()
-        tasks.value = data.map((task) => task.title)
-      } catch (error) {
-        console.log(error)
-      }
-    })
+const deleteTask = (index: number) => {
+  tasks.value.splice(index, 1)
+}
+
+onMounted(async () => {
+  interface Todo {
+    title: string
+  }
+
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/todos')
+    const data = await response.json()
+    tasks.value = data.map((task: Todo) => task.title)
+  } catch (error) {
+    console.log(error)
+  }
+})
 </script>
 
 <template>
@@ -45,7 +48,7 @@ import { onMounted, ref } from 'vue'
 
   <form @submit.prevent="addTask">
     <label for="newTask">Add task</label>
-    <input type="text" id="newTask" name="newTask" v-model="newTask"/>
+    <input type="text" id="newTask" name="newTask" v-model="newTask" />
     <button type="submit">Submit</button>
   </form>
 
@@ -58,7 +61,7 @@ import { onMounted, ref } from 'vue'
       </span>
     </li>
   </ul>
-  <br/>
+  <br />
   <!-- <button v-on:click="toggleStatus">Change status</button> -->
   <button @click="toggleStatus">Change status</button>
 </template>

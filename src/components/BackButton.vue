@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { ROUTE_PATHS } from '@/router/routeConstants'
 </script>

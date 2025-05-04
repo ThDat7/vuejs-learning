@@ -1,10 +1,10 @@
-<script setup>
+<script setup lang="ts">
 import logo from '@/assets/img/logo.png'
 import { ROUTE_PATHS } from '@/router/routeConstants'
 import { useRoute } from 'vue-router'
 import { RouterLink } from 'vue-router'
 
-const isActiveLink = (to) => {
+const isActiveLink = (to: string) => {
   const route = useRoute()
   return to === route.path
 }

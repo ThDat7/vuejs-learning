@@ -1,16 +1,17 @@
-<script setup>
+<script setup lang="ts">
 import JobForm from '@/components/JobForm.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import JobService from '@/service/JobService'
 import { ROUTE_NAMES } from '@/router/routeConstants'
 import { useToast } from 'vue-toastification'
+import type { Job } from '@/types/Job'
 
 const toast = useToast()
 const router = useRouter()
 const isLoading = ref(false)
 
-const addJob = async (job) => {
+const addJob = async (job: Job) => {
   if (!job) return
   try {
     isLoading.value = true

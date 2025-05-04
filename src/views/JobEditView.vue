@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import JobForm from '@/components/JobForm.vue'
 import { computed, onMounted, reactive, ref } from 'vue'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
@@ -6,17 +6,23 @@ import { useRoute, useRouter } from 'vue-router'
 import JobService from '@/service/JobService'
 import { useToast } from 'vue-toastification'
 import { ROUTE_NAMES } from '@/router/routeConstants'
+import type { Job } from '@/types/Job'
+
+interface JobEditState {
+  job: Job
+  isLoading: boolean
+}
 
 const toast = useToast()
 const route = useRoute()
 const router = useRouter()
 const isLoading = ref(false)
-const state = reactive({
-  job: {},
+const state = reactive<JobEditState>({
+  job: {} as Job,
   isLoading: true,
 })
 
-const id = computed(() => route.params.id)
+const id = computed(() => Number(route.params.id))
 
 onMounted(async () => {
   if (!id.value) return
@@ -31,7 +37,7 @@ onMounted(async () => {
   }
 })
 
-const editJob = async (job) => {
+const editJob = async (job: Job) => {
   if (!job) return
   try {
     isLoading.value = true

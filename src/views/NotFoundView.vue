@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ROUTE_PATHS } from '@/router/routeConstants'
 </script>
 

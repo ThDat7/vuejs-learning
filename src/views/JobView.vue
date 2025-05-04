@@ -1,21 +1,27 @@
-<script setup>
+<script setup lang="ts">
 import BackButton from '@/components/BackButton.vue'
 import { ROUTE_NAMES } from '@/router/routeConstants'
 import JobService from '@/service/JobService'
+import type { Job } from '@/types/Job'
 import { computed, onMounted, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import { useToast } from 'vue-toastification'
 
+interface JobViewState {
+  job: Job
+  isLoading: boolean
+}
+
 const router = useRouter()
 const toast = useToast()
 const route = useRoute()
-const state = reactive({
-  job: {},
+const state = reactive<JobViewState>({
+  job: {} as Job,
   isLoading: true,
 })
 
-const id = computed(() => route.params.id)
+const id = computed(() => Number(route.params.id))
 
 onMounted(async () => {
   if (!id.value) return
@@ -31,6 +37,10 @@ onMounted(async () => {
 
 const deleteJob = async () => {
   if (!id.value) return
+
+  const isConfirmed = confirm(`Are you sure you want to delete job with id ${id.value}`)
+
+  if (!isConfirmed) return
 
   try {
     await JobService.deleteJob(id.value)
@@ -108,6 +118,7 @@ const deleteJob = async () => {
                 >Edit Job</RouterLink
               >
               <button
+                @click="deleteJob"
                 class="focus:shadow-outline mt-4 block w-full rounded-full bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-600 focus:outline-none"
               >
                 Delete Job

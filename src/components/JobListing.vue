@@ -1,10 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import { ROUTE_NAMES } from '@/router/routeConstants'
 import { computed, ref } from 'vue'
+import type { Job } from '@/types/Job'
 
-const props = defineProps({
-  job: Object,
-})
+const props = defineProps<{
+  job: Job
+}>()
 
 const showFullDescription = ref(false)
 const toggleShowFullDescription = () => {
