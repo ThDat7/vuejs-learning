@@ -1,14 +1,14 @@
-import axios from "axios";
+import { ENDPOINTS } from "./apiConfig";
+import BaseService from "./BaseService";
 
-class JobService {
+class JobService extends BaseService {
     async getJobs() {
-        return axios.get('http://localhost:3000/jobs')
-            .then(response => response.data);
+        return this.get(ENDPOINTS.jobs)
     }
 
     async getJobById(id) {
-        return axios.get(`http://localhost:3000/jobs/${id}`)
-            .then(response => response.data);
+        return this.get(ENDPOINTS.job(id))
+    }
     }
 }
 
