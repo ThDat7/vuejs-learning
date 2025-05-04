@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "mock-server": "copy /Y \"src\\jobs-backup.json\" \"src\\jobs.json\" && npx json-server --watch src/jobs.json --port 3000",
     "build": "vite build",
     "preview": "vite preview"
   },
